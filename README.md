@@ -12,6 +12,15 @@ synced library, favourites and widgets keep working.
 
 Requires Kodi 19 or later.
 
+## Why forks
+
+The forks carry a number of fixes that upstream does not have yet. They
+were written with AI assistance, which Jellyfin's contribution policy
+restricts, so only part of them can go upstream and this will take a while.
+
+The forks are therefore used daily and actively maintained for the long term:
+they follow upstream releases, and the fixes are reapplied on top of each one.
+
 ## Versions
 
 `1:<upstream version>-<fork revision>`, for example `1:2.2.0-1+py3`:
