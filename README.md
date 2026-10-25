@@ -39,12 +39,21 @@ can stay installed.
 
 ## Release
 
-Build the add-on zips from the `release` branches (`python build.py
---version py3 --target <dir>` in each repository), then
+1. Raise the version in `release.yaml` on the `release` branch of the fork
+   and push the branch.
+2. Run
 
-    tools/build_repo.py <dir>/plugin.video.jellyfin+py3.zip <dir>/plugin.video.jellycon+py3.zip
+       tools/release.sh [jellyfin] [jellycon]
 
-The script copies the zips to `zips/<id>/`, writes `zips/addons.xml` with
-its checksum and a sha256 file for every zip, and zips the repository add-on
-from `repository.twiebe/`. Commit and push, GitHub Pages serves the result.
-Bump the version in `repository.twiebe/addon.xml` when changing it.
+   It builds the add-ons from the `release` branches of the forks, which it
+   expects next to this repository (override with `JELLYFIN_KODI=<path>`
+   and `JELLYCON=<path>`), and commits the result. Needs git, tar and
+   Docker, the Python part runs in a container.
+3. Check the commit and push, GitHub Pages serves the result.
+
+Under the hood `tools/build_repo.py` copies the zips to `zips/<id>/`,
+writes `zips/addons.xml` with its checksum and a sha256 file for every zip,
+and zips the repository add-on from `repository.twiebe/`. A version that is
+already published is skipped: Kodi only updates to a higher version, so
+every change needs a new one. The same goes for the repository add-on, raise
+its version in `repository.twiebe/addon.xml` when changing it.
