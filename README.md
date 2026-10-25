@@ -41,7 +41,8 @@ can stay installed.
 
 1. Raise the version in `release.yaml` on the `release` branch of the fork
    and push the branch.
-2. Run
+2. Run `make release` (both), `make release-jellyfin-kodi` or
+   `make release-jellycon`, which call
 
        tools/release.sh [jellyfin] [jellycon]
 
