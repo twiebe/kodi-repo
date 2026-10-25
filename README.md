@@ -37,6 +37,13 @@ Kodi updates an add-on only from the repository it was installed from, so
 after this step updates come from this repository. The Jellyfin repository
 can stay installed.
 
+## Upstream
+
+`make sync-master` fast-forwards `master` of both forks to upstream master,
+locally and on GitHub (`make sync-master-jellyfin-kodi`,
+`make sync-master-jellycon` for one). The `release` branches stay as they
+are: merging upstream into them is a release of its own, with a new version.
+
 ## Release
 
 1. Raise the version in `release.yaml` on the `release` branch of the fork
