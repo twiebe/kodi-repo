@@ -4,8 +4,8 @@ Kodi repository with forks of two Jellyfin add-ons:
 
 | Add-on | Id | Source |
 |---|---|---|
-| Jellyfin for Kodi | `plugin.video.jellyfin` | https://github.com/twiebe/jellyfin-kodi (branch `fork-build`) |
-| JellyCon | `plugin.video.jellycon` | https://github.com/twiebe/jellycon (branch `fork-build`) |
+| Jellyfin for Kodi | `plugin.video.jellyfin` | https://github.com/twiebe/jellyfin-kodi (branch `release`) |
+| JellyCon | `plugin.video.jellycon` | https://github.com/twiebe/jellycon (branch `release`) |
 
 The forks keep the add-on ids of the upstream add-ons, so settings, the
 synced library, favourites and widgets keep working.
@@ -39,7 +39,7 @@ can stay installed.
 
 ## Release
 
-Build the add-on zips from the `fork-build` branches (`python build.py
+Build the add-on zips from the `release` branches (`python build.py
 --version py3 --target <dir>` in each repository), then
 
     tools/build_repo.py <dir>/plugin.video.jellyfin+py3.zip <dir>/plugin.video.jellycon+py3.zip
