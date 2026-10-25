@@ -1,4 +1,4 @@
-# twiebe Kodi repository
+# Kodi repository by Thomas Wiebe
 
 Kodi repository with forks of two Jellyfin add-ons:
 
