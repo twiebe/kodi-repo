@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-  <addon id="plugin.video.jellycon" name="JellyCon" version="1:1.0.2-2+py3" provider-name="Jellyfin Contributors">
+  <addon id="plugin.video.jellycon" name="JellyCon" version="1:1.0.2-4+py3" provider-name="Jellyfin Contributors">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -24,14 +24,24 @@
       <source>https://github.com/jellyfin/jellycon</source>
       <summary lang="en_GB">Browse and play your Jellyfin server media library.</summary>
       <description lang="en_GB">An addon to allow you to browse and playback your Jellyfin (https://jellyfin.org) Movie, TV Show and Music collections.</description>
+      <news>v1:1.0.2-4 (2026-10-26):
+Fork of JellyCon 1.0.2 (twiebe)
+-------------------------------
++ Show server errors to the user and let them resolve rejected logins
++ Don't keep Kodi from exiting: interruptible keepalive, faster service stop
++ Settings converted to settings format version 1
++ Short help text for every visible setting
++ Context menu works again when Kodi started before the user logged in
++ A user switch is picked up right away, without restarting Kodi
++ Optionally save the password, so JellyCon signs in again by itself after the user was disabled</news>
       <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>
       </assets>
-      <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-2-py3.zip</path>
+      <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-4-py3.zip</path>
     </extension>
   </addon>
-  <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-2+py3" provider-name="Jellyfin Contributors">
+  <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-3+py3" provider-name="Jellyfin Contributors">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -78,7 +88,7 @@ Jellyfin for Kodi is the absolute best way to enjoy the incredible Kodi playback
 * Instant synchronization with the Jellyfin server
 * Full support for Movie, TV and Music collections
 * Jellyfin Server direct stream and transcoding support - use Kodi when you are away from home!</description>
-      <news>v1:2.2.0-2 (2026-10-25):
+      <news>v1:2.2.0-3 (2026-10-26):
 Fork of jellyfin-kodi 2.2.0 (twiebe)
 ------------------------------------
 + Update sync only writes the items that changed, fetched in parallel
@@ -95,12 +105,13 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
 + Keep the server's tracks when the transcode track dialog is disabled
 + Treat 0 days in next episodes as no limit again
 + Remove the enhanced artwork setting
-+ Short help text for every visible setting</news>
++ Short help text for every visible setting
++ Add to playlist in the Jellyfin options of movies, episodes, music videos and songs</news>
       <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
       </assets>
-      <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-2-py3.zip</path>
+      <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-3-py3.zip</path>
     </extension>
   </addon>
   <addon id="repository.twiebe" name="twiebe Repository" version="1.0.0" provider-name="Thomas Wiebe">
