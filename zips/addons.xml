@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-  <addon id="plugin.video.jellycon" name="JellyCon" version="1:1.0.2-4+py3" provider-name="Jellyfin Contributors">
+  <addon id="plugin.video.jellycon" name="JellyCon" version="1:1.0.2-5+py3" provider-name="Jellyfin Contributors">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -24,7 +24,7 @@
       <source>https://github.com/jellyfin/jellycon</source>
       <summary lang="en_GB">Browse and play your Jellyfin server media library.</summary>
       <description lang="en_GB">An addon to allow you to browse and playback your Jellyfin (https://jellyfin.org) Movie, TV Show and Music collections.</description>
-      <news>v1:1.0.2-4 (2026-10-26):
+      <news>v1:1.0.2-5 (2026-10-27):
 Fork of JellyCon 1.0.2 (twiebe)
 -------------------------------
 + Show server errors to the user and let them resolve rejected logins
@@ -33,15 +33,17 @@ Fork of JellyCon 1.0.2 (twiebe)
 + Short help text for every visible setting
 + Context menu works again when Kodi started before the user logged in
 + A user switch is picked up right away, without restarting Kodi
-+ Optionally save the password, so JellyCon signs in again by itself after the user was disabled</news>
++ Optionally save the password, so JellyCon signs in again by itself after the user was disabled
++ Playback, stop and the context menu react faster, background work no longer holds up the player
++ Resume starts at the resume point right away, without a second seek</news>
       <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>
       </assets>
-      <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-4-py3.zip</path>
+      <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-5-py3.zip</path>
     </extension>
   </addon>
-  <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-3+py3" provider-name="Jellyfin Contributors">
+  <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-5+py3" provider-name="Jellyfin Contributors">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -88,7 +90,7 @@ Jellyfin for Kodi is the absolute best way to enjoy the incredible Kodi playback
 * Instant synchronization with the Jellyfin server
 * Full support for Movie, TV and Music collections
 * Jellyfin Server direct stream and transcoding support - use Kodi when you are away from home!</description>
-      <news>v1:2.2.0-3 (2026-10-26):
+      <news>v1:2.2.0-5 (2026-10-27):
 Fork of jellyfin-kodi 2.2.0 (twiebe)
 ------------------------------------
 + Update sync only writes the items that changed, fetched in parallel
@@ -106,12 +108,18 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
 + Treat 0 days in next episodes as no limit again
 + Remove the enhanced artwork setting
 + Short help text for every visible setting
-+ Add to playlist in the Jellyfin options of movies, episodes, music videos and songs</news>
++ Add to playlist in the Jellyfin options of movies, episodes, music videos and songs
++ A stop no longer holds up other add-ons for 3 seconds (a skin's return to the info page)
++ Playback starts faster, the skip button and dialogs no longer hold up other add-ons
++ The stop position is reported to the second, not up to 10 seconds old
++ The skip button closes when seeking back before the segment
++ Optionally save the password, so jellyfin-kodi signs in again by itself after the user was disabled
++ "Update password" no longer stops library updates until Kodi restarts</news>
       <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
       </assets>
-      <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-3-py3.zip</path>
+      <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-5-py3.zip</path>
     </extension>
   </addon>
   <addon id="repository.twiebe" name="twiebe Repository" version="1.0.0" provider-name="Thomas Wiebe">
