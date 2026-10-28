@@ -1,16 +1,19 @@
 # Kodi repository by Thomas Wiebe
 
-Kodi repository with forks of two Jellyfin add-ons:
+Kodi repository with forks of two Jellyfin add-ons and the Nightcity skin:
 
 | Add-on | Id | Source |
 |---|---|---|
 | Jellyfin for Kodi | `plugin.video.jellyfin` | https://github.com/twiebe/jellyfin-kodi (branch `release`) |
 | JellyCon | `plugin.video.jellycon` | https://github.com/twiebe/jellycon (branch `release`) |
+| Nightcity | `skin.nightcity` | https://github.com/twiebe/kodi-skin-nightcity (branch `main`) |
 
 The forks keep the add-on ids of the upstream add-ons, so settings, the
 synced library, favourites and widgets keep working.
 
-Requires Kodi 19 or later.
+The Jellyfin add-ons require Kodi 19 or later, Nightcity Kodi 21. Nightcity
+needs TMDb Helper 6.17.9 or later, which this repository does not carry:
+install it from its own repository first.
 
 ## Why forks
 
@@ -36,7 +39,8 @@ they follow upstream releases, and the fixes are reapplied on top of each one.
 1. Settings > File manager > Add source: `https://twiebe.github.io/kodi-repo/`
 2. Add-ons > Install from zip file > that source > `repository.twiebe-<version>.zip`
 3. Add-ons > Install from repository > twiebe Repository > Video add-ons >
-   Jellyfin or JellyCon > Install
+   Jellyfin or JellyCon > Install, or Look and feel > Skin > Nightcity >
+   Install
 
 If the upstream add-on is installed, Kodi asks whether to replace it, answer
 Yes. When it then asks whether to remove the add-on's data, answer **No**,
@@ -55,17 +59,18 @@ are: merging upstream into them is a release of its own, with a new version.
 
 ## Release
 
-1. Raise the version in `release.yaml` on the `release` branch of the fork
-   and push the branch.
-2. Run `make release` (both), `make release-jellyfin-kodi` or
-   `make release-jellycon`, which call
+1. Raise the version in `release.yaml` on the `release` branch of the fork,
+   or in `addon.xml` on the `main` branch of the skin, and push the branch.
+2. Run `make release` (all), `make release-jellyfin-kodi`,
+   `make release-jellycon` or `make release-nightcity`, which call
 
-       tools/release.sh [jellyfin] [jellycon]
+       tools/release.sh [jellyfin] [jellycon] [nightcity]
 
-   It builds the add-ons from the `release` branches of the forks, which it
-   expects next to this repository (override with `JELLYFIN_KODI=<path>`
-   and `JELLYCON=<path>`), and commits the result. Needs git, tar and
-   Docker, the Python part runs in a container.
+   It builds the add-ons from the `release` branches of the forks and the
+   `main` branch of the skin, which it expects next to this repository
+   (override with `JELLYFIN_KODI=<path>`, `JELLYCON=<path>` and
+   `NIGHTCITY=<path>`), and commits the result. Needs git, tar and Docker,
+   the Python part runs in a container.
 3. Check the commit and push, GitHub Pages serves the result.
 
 Under the hood `tools/build_repo.py` copies the zips to `zips/<id>/`,

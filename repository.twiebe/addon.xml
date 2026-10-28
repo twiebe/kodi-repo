@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="repository.twiebe" name="twiebe Repository" version="1.0.0" provider-name="Thomas Wiebe">
+<addon id="repository.twiebe" name="twiebe Repository" version="1.0.1" provider-name="Thomas Wiebe">
   <extension point="xbmc.addon.repository" name="twiebe Repository">
     <dir>
       <info compressed="false">https://twiebe.github.io/kodi-repo/zips/addons.xml</info>
@@ -9,8 +9,8 @@
     </dir>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Forks of the Jellyfin add-ons for Kodi</summary>
-    <description lang="en_GB">Jellyfin for Kodi and JellyCon with fixes that are not released upstream yet. The add-ons keep their ids: install them from this repository once to replace the upstream versions, Kodi then takes their updates from here.</description>
+    <summary lang="en_GB">Forks of the Jellyfin add-ons and the Nightcity skin</summary>
+    <description lang="en_GB">Jellyfin for Kodi and JellyCon with fixes that are not released upstream yet. The add-ons keep their ids: install them from this repository once to replace the upstream versions, Kodi then takes their updates from here. Also the Nightcity skin for Kodi 21, which needs TMDb Helper.</description>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
     <source>https://github.com/twiebe/kodi-repo</source>
