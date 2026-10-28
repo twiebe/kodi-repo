@@ -12,8 +12,11 @@ The forks keep the add-on ids of the upstream add-ons, so settings, the
 synced library, favourites and widgets keep working.
 
 The Jellyfin add-ons require Kodi 19 or later, Nightcity Kodi 21. Nightcity
-needs TMDb Helper 6.17.9 or later, which this repository does not carry:
-install it from its own repository first.
+needs TMDb Helper 6.17.9 or later, which this repository does not carry and
+the official Kodi repository only has in an older version: install
+jurialmunkey's repository first (`repository.jurialmunkey-<version>.zip` from
+`https://jurialmunkey.github.io/repository.jurialmunkey/`, added as a source
+like below), then Kodi installs TMDb Helper together with the skin.
 
 ## Why forks
 
