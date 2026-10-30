@@ -5,7 +5,7 @@
 JELLYFIN_KODI ?= ../jellyfin-kodi
 JELLYCON ?= ../jellycon
 NIGHTCITY ?= ../kodi-skin-nightcity
-TMDBHELPER ?= ../plugin-video-themoviedb-helper
+TMDBHELPER ?= ../plugin.video.themoviedb.helper
 export JELLYFIN_KODI JELLYCON NIGHTCITY TMDBHELPER
 
 .PHONY: release release-jellyfin-kodi release-jellycon release-nightcity release-tmdbhelper
