@@ -65,8 +65,17 @@ for name in "$@"; do
     git -C "$source" archive "$commit" | tar -x -C "$BUILD/$name"
 done
 
+# The build runs as the user, so its files are the user's. Rootless Podman (also behind a docker
+# command) maps the user to root in the container: keep-id keeps the ids instead, and :z lets
+# the container read the checkout under SELinux.
+if docker --version 2>/dev/null | grep -qi podman; then
+    run_as="--userns=keep-id" mount=":z"
+else
+    run_as="--user $(id -u):$(id -g)" mount=""
+fi
 docker build -q -t "$IMAGE" "$ROOT/tools" >/dev/null
-docker run --rm --user "$(id -u):$(id -g)" -v "$ROOT:/repo" -w /repo "$IMAGE" sh -ec '
+docker run --rm $run_as -v "$ROOT:/repo$mount" -w /repo "$IMAGE" sh -ec '
+    ls -d _release/*/ >/dev/null 2>&1 || { echo "the container cannot read _release in /repo" >&2; exit 1; }
     for dir in _release/*/; do
         [ "$dir" = _release/out/ ] && continue
         if [ -f "$dir/build.py" ]; then
