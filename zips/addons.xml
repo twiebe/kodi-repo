@@ -122,7 +122,7 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
       <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-5-py3.zip</path>
     </extension>
   </addon>
-  <addon id="plugin.video.themoviedb.helper" version="1:6.20.0-2" name="TMDb Helper" provider-name="jurialmunkey">
+  <addon id="plugin.video.themoviedb.helper" version="1:6.20.0-3" name="TMDb Helper" provider-name="jurialmunkey">
     <requires>
       <import addon="xbmc.python" version="3.0.1" />
       <import addon="script.module.requests" version="2.9.1" />
@@ -166,7 +166,7 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
         <screenshot>resources/screenshot-01.jpg</screenshot>
         <screenshot>resources/screenshot-02.jpg</screenshot>
       </assets>
-      <path>plugin.video.themoviedb.helper/plugin.video.themoviedb.helper-6.20.0-2.zip</path>
+      <path>plugin.video.themoviedb.helper/plugin.video.themoviedb.helper-6.20.0-3.zip</path>
     </extension>
   </addon>
   <addon id="repository.twiebe" name="twiebe Repository" version="1.0.1" provider-name="Thomas Wiebe">
