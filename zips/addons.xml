@@ -43,7 +43,7 @@ Fork of JellyCon 1.0.2 (twiebe)
       <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-5-py3.zip</path>
     </extension>
   </addon>
-  <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-5+py3" provider-name="Jellyfin Contributors">
+  <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-7+py3" provider-name="Jellyfin Contributors">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -90,7 +90,7 @@ Jellyfin for Kodi is the absolute best way to enjoy the incredible Kodi playback
 * Instant synchronization with the Jellyfin server
 * Full support for Movie, TV and Music collections
 * Jellyfin Server direct stream and transcoding support - use Kodi when you are away from home!</description>
-      <news>v1:2.2.0-5 (2026-10-27):
+      <news>v1:2.2.0-7 (2026-10-31):
 Fork of jellyfin-kodi 2.2.0 (twiebe)
 ------------------------------------
 + Update sync only writes the items that changed, fetched in parallel
@@ -114,12 +114,14 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
 + The stop position is reported to the second, not up to 10 seconds old
 + The skip button closes when seeking back before the segment
 + Optionally save the password, so jellyfin-kodi signs in again by itself after the user was disabled
-+ "Update password" no longer stops library updates until Kodi restarts</news>
++ "Update password" no longer stops library updates until Kodi restarts
++ A queue started shortly after a stop is no longer emptied, the whole album plays
++ A stopped queue is cleared right at the stop, not 3 seconds later</news>
       <assets>
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.png</fanart>
       </assets>
-      <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-5-py3.zip</path>
+      <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-7-py3.zip</path>
     </extension>
   </addon>
   <addon id="plugin.video.themoviedb.helper" version="1:6.20.0-3" name="TMDb Helper" provider-name="jurialmunkey">
