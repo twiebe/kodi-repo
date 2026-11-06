@@ -1,20 +1,21 @@
 # Kodi repository by Thomas Wiebe
 
 Kodi repository with forks of two Jellyfin add-ons and TMDb Helper, and the
-Nightcity skin:
+Nightcity and Confuse skins:
 
 | Add-on | Id | Source |
 |---|---|---|
 | Jellyfin for Kodi | `plugin.video.jellyfin` | https://github.com/twiebe/jellyfin-kodi (branch `release`) |
 | JellyCon | `plugin.video.jellycon` | https://github.com/twiebe/jellycon (branch `release`) |
 | Nightcity | `skin.nightcity` | https://github.com/twiebe/kodi-skin-nightcity (branch `main`) |
+| Confuse | `skin.confuse` | https://github.com/twiebe/kodi-skin-nightcity (branch `main`, `skins/confuse`) |
 | TMDb Helper | `plugin.video.themoviedb.helper` | https://github.com/twiebe/plugin.video.themoviedb.helper (branch `release`) |
 
 The forks keep the add-on ids of the upstream add-ons, so settings, the
 synced library, favourites and widgets keep working.
 
-The Jellyfin add-ons require Kodi 19 or later, Nightcity Kodi 21. Nightcity
-needs TMDb Helper 6.17.9 or later, which comes from this repository. TMDb
+The Jellyfin add-ons require Kodi 19 or later, the skins Kodi 21. Both skins
+need TMDb Helper 6.17.9 or later, which comes from this repository. TMDb
 Helper in turn needs `script.module.jurialmunkey` 0.2.35 and
 `script.module.infotagger` 0.1.0, which the official Kodi repository only has
 in older versions: install jurialmunkey's repository first
@@ -51,7 +52,7 @@ they follow upstream releases, and the fixes are reapplied on top of each one.
 2. Add-ons > Install from zip file > that source > `repository.twiebe-<version>.zip`
 3. Add-ons > Install from repository > twiebe Repository > Video add-ons >
    Jellyfin, JellyCon or TMDb Helper > Install, or Look and feel > Skin >
-   Nightcity > Install
+   Nightcity or Confuse > Install
 
 If the upstream add-on is installed, Kodi asks whether to replace it, answer
 Yes. When it then asks whether to remove the add-on's data, answer **No**,
@@ -72,15 +73,21 @@ are: merging upstream into them is a release of its own, with a new version.
 
 1. Raise the version in `release.yaml` on the `release` branch of a
    Jellyfin fork, in `addon.xml` on the `release` branch of TMDb Helper or in
-   `addon.xml` on the `main` branch of the skin, and push the branch.
+   `addon.xml` or `skins/confuse/addon.xml` on the `main` branch of the skins,
+   and push the branch.
 2. Run `make release` (all), `make release-jellyfin-kodi`,
-   `make release-jellycon`, `make release-nightcity` or
-   `make release-tmdbhelper`, which call
+   `make release-jellycon`, `make release-nightcity`, `make release-confuse`
+   or `make release-tmdbhelper`, which call
 
-       tools/release.sh [jellyfin] [jellycon] [nightcity] [tmdbhelper]
+       tools/release.sh [jellyfin] [jellycon] [nightcity] [confuse] [tmdbhelper]
+
+   Nightcity and Confuse are released on their own: `nightcity` builds only
+   Nightcity. `make release` (all) includes Confuse once the branch of the skins
+   has `skins/confuse`. Confuse has its own version and its tags are
+   `confuse-v<version>`, as it shares its source repository with Nightcity.
 
    It builds the add-ons from the `release` branches of the forks and the
-   `main` branch of the skin, which it expects next to this repository
+   `main` branch of the skins, which it expects next to this repository
    (override with `JELLYFIN_KODI=<path>`, `JELLYCON=<path>`,
    `NIGHTCITY=<path>` and `TMDBHELPER=<path>`), and commits the result.
    TMDb Helper has no build script: its zip is the branch as it is, without
