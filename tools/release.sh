@@ -1,10 +1,14 @@
 #!/bin/sh
-# Build the add-ons from the release branch of their forks and the skin from
-# its main branch, add them to the repository, then commit and tag each
-# released add-on in its source repository (annotated, with what changed).
-# Pushing the commit and the tags is left to you.
+# Build the add-ons from the release branch of their forks and the skins from
+# the main branch of the skin repository, add them to the repository, then
+# commit and tag each released add-on in its source repository (annotated, with
+# what changed). Pushing the commit and the tags is left to you.
 #
-#   tools/release.sh [jellyfin] [jellycon] [nightcity] [tmdbhelper]   (default: all)
+#   tools/release.sh [jellyfin] [jellycon] [nightcity] [confuse] [tmdbhelper]   (default: all)
+#
+# Each name builds only that add-on: nightcity and confuse share a source but are
+# released on their own. Without a name confuse is part of all as soon as the branch
+# of the skin has skins/confuse.
 #
 # The sources are expected next to this repository, override with
 # JELLYFIN_KODI=/path, JELLYCON=/path, NIGHTCITY=/path and TMDBHELPER=/path.
@@ -26,7 +30,13 @@ BUILD=$ROOT/_release
 # TMDb Helper has no build script, its zip is the branch without these
 TMDBHELPER_EXCLUDE=".github .gitignore AGENTS.md AI_USAGE.md CONTRIBUTING.md icon.xcf"
 
-[ $# -gt 0 ] || set -- jellyfin jellycon nightcity tmdbhelper
+CONFUSE_ADDON=skins/confuse/addon.xml
+if [ $# -eq 0 ]; then
+    set -- jellyfin jellycon nightcity tmdbhelper
+    if git -C "$NIGHTCITY" cat-file -e "$NIGHTCITY_BRANCH:$CONFUSE_ADDON" 2>/dev/null; then
+        set -- "$@" confuse
+    fi
+fi
 
 if [ -n "$(git -C "$ROOT" status --porcelain)" ]; then
     echo "kodi-repo has uncommitted changes, commit or stash them first" >&2
@@ -40,14 +50,18 @@ for name in "$@"; do
     case $name in
         jellyfin) source=$JELLYFIN_KODI branch=$BRANCH ;;
         jellycon) source=$JELLYCON branch=$BRANCH ;;
-        nightcity) source=$NIGHTCITY branch=$NIGHTCITY_BRANCH ;;
+        nightcity|confuse) source=$NIGHTCITY branch=$NIGHTCITY_BRANCH ;;
         tmdbhelper) source=$TMDBHELPER branch=$BRANCH ;;
-        *) echo "unknown add-on: $name (jellyfin, jellycon, nightcity or tmdbhelper)" >&2; exit 1 ;;
+        *) echo "unknown add-on: $name (jellyfin, jellycon, nightcity, confuse or tmdbhelper)" >&2; exit 1 ;;
     esac
     commit=$(git -C "$source" rev-parse --verify --quiet "$branch^{commit}") || {
         echo "$source: no branch $branch" >&2
         exit 1
     }
+    if [ "$name" = confuse ] && ! git -C "$source" cat-file -e "$commit:$CONFUSE_ADDON" 2>/dev/null; then
+        echo "$source: branch $branch has no $CONFUSE_ADDON" >&2
+        exit 1
+    fi
     # The README links the source, so the release should be on GitHub too
     if [ "$(git -C "$source" rev-parse --verify --quiet "origin/$branch" || true)" != "$commit" ]; then
         echo "warning: $name $branch differs from origin/$branch (as of the last fetch), push it" >&2
@@ -80,6 +94,9 @@ docker run --rm $run_as -v "$ROOT:/repo$mount" -w /repo "$IMAGE" sh -ec '
         [ "$dir" = _release/out/ ] && continue
         if [ -f "$dir/build.py" ]; then
             python "$dir/build.py" --version py3 --source "$dir" --target _release/out >/dev/null
+        elif [ "$dir" = _release/confuse/ ]; then
+            # the overlay of the skin: tools/build.py --skin NAME OUT_DIR
+            python "$dir/tools/build.py" --skin confuse _release/out >/dev/null
         else
             # the skin: tools/build.py OUT_DIR
             python "$dir/tools/build.py" _release/out >/dev/null
@@ -102,7 +119,7 @@ git -C "$ROOT" add -A
 git -C "$ROOT" commit -q -m "Release $(echo "$added" | paste -sd ',' - | sed 's/,/, /g')"
 git -C "$ROOT" log -1 --format='Committed %h: %s'
 
-# What changed in a release, one "- " line each: the skin's news of the version (addon.xml,
+# What changed in a release, one "- " line each: a skin's news of the version (its addon.xml,
 # one line per sentence); for a Jellyfin fork the changelog lines of release.yaml that its
 # previous release tag did not have yet (all of them for the first); for TMDb Helper, which
 # has no changelog of its own, the subjects of the fork's own commits since its previous
@@ -113,8 +130,10 @@ notes() { # name source commit
         before=$(git -C "$2" describe --tags --match 'v*-*' --abbrev=0 "$3^" 2>/dev/null || true)
         git -C "$2" log --no-merges --reverse --format=%s "$3" --not "$base" $before |
             grep -v '^Release fork version' | sed 's/^:[a-z0-9_+-]*: //; s/^/- /'
-    elif [ "$1" = nightcity ]; then
-        git -C "$2" show "$3:addon.xml" | tr '\n' ' ' | sed -n 's/.*<news>\([^[<]*\).*/\1/p' |
+    elif [ "$1" = nightcity ] || [ "$1" = confuse ]; then
+        addon_xml=addon.xml
+        [ "$1" = nightcity ] || addon_xml=$CONFUSE_ADDON
+        git -C "$2" show "$3:$addon_xml" | tr '\n' ' ' | sed -n 's/.*<news>\([^[<]*\).*/\1/p' |
             sed 's/^ *[0-9][0-9.]* - //; s/\. /.\n/g' | sed 's/^ *//; /^$/d; s/^/- /'
     else
         before=$(git -C "$2" describe --tags --match 'v*-*' --abbrev=0 "$3^" 2>/dev/null || true)
@@ -128,18 +147,21 @@ notes() { # name source commit
 
 # Tag every released add-on in its source repository at the commit it was built from, annotated
 # with what changed: v<version>, without the epoch and the +py3 of the forks (1:1.0.2-5+py3 ->
-# v1.0.2-5), so a fork's tag never takes the name of an upstream one (v1.0.2)
+# v1.0.2-5), so a fork's tag never takes the name of an upstream one (v1.0.2). Confuse shares its
+# source repository with Nightcity, so its tags are confuse-v<version>
 echo "$added" | while read -r id version; do
     case $id in
         plugin.video.jellyfin) name=jellyfin ;;
         plugin.video.jellycon) name=jellycon ;;
         skin.nightcity) name=nightcity ;;
+        skin.confuse) name=confuse ;;
         plugin.video.themoviedb.helper) name=tmdbhelper ;;
         *) continue ;;
     esac
     set -- $(echo "$sources" | grep "^$name ")
     source=$2 commit=$3
     tag=v$(echo "$version" | sed 's/^[0-9]*://; s/+py3$//')
+    [ "$name" != confuse ] || tag=confuse-$tag
     if git -C "$source" rev-parse --verify --quiet "refs/tags/$tag" >/dev/null; then
         echo "warning: $source already has tag $tag, left as it is" >&2
         continue

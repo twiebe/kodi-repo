@@ -1,5 +1,5 @@
 # Build add-ons from the release branches of the forks and the main branch
-# of the skin and commit them, see tools/release.sh for the options
+# of the skins and commit them, see tools/release.sh for the options
 # (JELLYFIN_KODI, JELLYCON, NIGHTCITY, TMDBHELPER, BRANCH, NIGHTCITY_BRANCH).
 
 JELLYFIN_KODI ?= ../jellyfin-kodi
@@ -8,11 +8,11 @@ NIGHTCITY ?= ../kodi-skin-nightcity
 TMDBHELPER ?= ../plugin.video.themoviedb.helper
 export JELLYFIN_KODI JELLYCON NIGHTCITY TMDBHELPER
 
-.PHONY: release release-jellyfin-kodi release-jellycon release-nightcity release-tmdbhelper
+.PHONY: release release-jellyfin-kodi release-jellycon release-nightcity release-confuse release-tmdbhelper
 .PHONY: sync-master sync-master-jellyfin-kodi sync-master-jellycon
 
 release:
-	tools/release.sh jellyfin jellycon nightcity tmdbhelper
+	tools/release.sh
 
 release-jellyfin-kodi:
 	tools/release.sh jellyfin
@@ -22,6 +22,9 @@ release-jellycon:
 
 release-nightcity:
 	tools/release.sh nightcity
+
+release-confuse:
+	tools/release.sh confuse
 
 release-tmdbhelper:
 	tools/release.sh tmdbhelper
