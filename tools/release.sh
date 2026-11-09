@@ -123,10 +123,14 @@ git -C "$ROOT" log -1 --format='Committed %h: %s'
 # one line per sentence); for a Jellyfin fork the changelog lines of release.yaml that its
 # previous release tag did not have yet (all of them for the first); for TMDb Helper, which
 # has no changelog of its own, the subjects of the fork's own commits since its previous
-# release tag (all of them for the first), without upstream's and the release commits
+# release tag (all of them for the first), without upstream's (from upstream/nexus) and the
+# release commits
 notes() { # name source commit
     if [ "$1" = tmdbhelper ]; then
-        base=$(git -C "$2" describe --tags --match 'v*' --exclude 'v*-*' --abbrev=0 "$3")
+        # upstream does not tag every release (6.21.1 to 6.21.3 were not): where the fork leaves
+        # upstream's branch, else its last tag
+        base=$(git -C "$2" merge-base "$3" upstream/nexus 2>/dev/null ||
+            git -C "$2" describe --tags --match 'v*' --exclude 'v*-*' --abbrev=0 "$3")
         before=$(git -C "$2" describe --tags --match 'v*-*' --abbrev=0 "$3^" 2>/dev/null || true)
         git -C "$2" log --no-merges --reverse --format=%s "$3" --not "$base" $before |
             grep -v '^Release fork version' | sed 's/^:[a-z0-9_+-]*: //; s/^/- /'
