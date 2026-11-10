@@ -133,7 +133,7 @@ notes() { # name source commit
             git -C "$2" describe --tags --match 'v*' --exclude 'v*-*' --abbrev=0 "$3")
         before=$(git -C "$2" describe --tags --match 'v*-*' --abbrev=0 "$3^" 2>/dev/null || true)
         git -C "$2" log --no-merges --reverse --format=%s "$3" --not "$base" $before |
-            grep -v '^Release fork version' | sed 's/^:[a-z0-9_+-]*: //; s/^/- /'
+            sed 's/^:[a-z0-9_+-]*: //' | grep -v '^Release fork version' | sed 's/^/- /'
     elif [ "$1" = nightcity ] || [ "$1" = confuse ]; then
         addon_xml=addon.xml
         [ "$1" = nightcity ] || addon_xml=$CONFUSE_ADDON
