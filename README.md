@@ -16,7 +16,7 @@ synced library, favourites and widgets keep working.
 
 The Jellyfin add-ons require Kodi 19 or later, the skins Kodi 21. Both skins
 need TMDb Helper 6.17.9 or later, which comes from this repository. TMDb
-Helper in turn needs `script.module.jurialmunkey` 0.2.35 and
+Helper in turn needs `script.module.jurialmunkey` 0.2.39 and
 `script.module.infotagger` 0.1.0, which the official Kodi repository only has
 in older versions: install jurialmunkey's repository first
 (`repository.jurialmunkey-<version>.zip` from
