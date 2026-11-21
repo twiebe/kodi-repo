@@ -6,7 +6,7 @@
 JELLYFIN_KODI ?= ../jellyfin-kodi
 JELLYCON ?= ../jellycon
 NIGHTCITY ?= ../kodi-skin-nightcity
-TMDBHELPER ?= ../plugin.video.themoviedb.helper
+TMDBHELPER ?= ../plugin-video-themoviedb-helper
 PKC ?= ../plexkodiconnect
 PKC_MOVIES ?= ../plugin-video-plexkodiconnect-movies
 PKC_TVSHOWS ?= ../plugin-video-plexkodiconnect-tvshows
