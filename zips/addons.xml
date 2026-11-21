@@ -134,7 +134,7 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
       <path>plugin.video.jellyfin/plugin.video.jellyfin-2.2.0-13-py3.zip</path>
     </extension>
   </addon>
-  <addon id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="1:3.12.6-1" provider-name="croneter">
+  <addon id="plugin.video.plexkodiconnect" name="PlexKodiConnect" version="1:3.12.6-2" provider-name="croneter">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0" />
@@ -241,7 +241,11 @@ Fork of jellyfin-kodi 2.2.0 (twiebe)
       <summary lang="ko_KR">Plex를 Kodi에 기본 통합</summary>
       <description lang="ko_KR">Kodi를 Plex Media Server에 연결합니다. 이 플러그인은 Plex로 모든 비디오를 관리하고 Kodi로는 관리하지 않는다고 가정합니다. Kodi 비디오 및 음악 데이터베이스에 이미 저장된 데이터가 손실 될 수 있습니다 (이 플러그인이 직접 변경하므로). 자신의 책임하에 사용하십시오!</description>
       <disclaimer lang="ko_KR">자신의 책임하에 사용</disclaimer>
-      <news>version 1:3.12.6-1 (fork of 3.12.6 by twiebe):
+      <news>version 1:3.12.6-2 (fork of 3.12.6 by twiebe):
+Fixed
+- Switching back to PlexKodiConnect of upstream works: with the version 1:3.12.6-1 stored in its settings, it failed to start once and then to sync on every start
+
+version 1:3.12.6-1 (fork of 3.12.6 by twiebe):
 Sync you can rely on
 - A failed or slow answer of the PMS no longer hangs the sync, the other libraries sync on (upstream #2087, #1832, #1967)
 - An error in the background sync no longer stops PKC from syncing until Kodi restarts (upstream #2069)
@@ -762,7 +766,7 @@ version 3.0.1:
 version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
 </news>
-      <path>plugin.video.plexkodiconnect/plugin.video.plexkodiconnect-3.12.6-1.zip</path>
+      <path>plugin.video.plexkodiconnect/plugin.video.plexkodiconnect-3.12.6-2.zip</path>
     </extension>
   </addon>
   <addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="1:3.0.2-1" provider-name="croneter">
