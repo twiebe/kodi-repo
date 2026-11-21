@@ -1,14 +1,19 @@
 # Build add-ons from the release branches of the forks and the main branch
 # of the skins and commit them, see tools/release.sh for the options
-# (JELLYFIN_KODI, JELLYCON, NIGHTCITY, TMDBHELPER, BRANCH, NIGHTCITY_BRANCH).
+# (JELLYFIN_KODI, JELLYCON, NIGHTCITY, TMDBHELPER, PKC, PKC_MOVIES, PKC_TVSHOWS,
+# BRANCH, NIGHTCITY_BRANCH).
 
 JELLYFIN_KODI ?= ../jellyfin-kodi
 JELLYCON ?= ../jellycon
 NIGHTCITY ?= ../kodi-skin-nightcity
 TMDBHELPER ?= ../plugin.video.themoviedb.helper
-export JELLYFIN_KODI JELLYCON NIGHTCITY TMDBHELPER
+PKC ?= ../plexkodiconnect
+PKC_MOVIES ?= ../plugin-video-plexkodiconnect-movies
+PKC_TVSHOWS ?= ../plugin-video-plexkodiconnect-tvshows
+export JELLYFIN_KODI JELLYCON NIGHTCITY TMDBHELPER PKC PKC_MOVIES PKC_TVSHOWS
 
 .PHONY: release release-jellyfin-kodi release-jellycon release-nightcity release-confuse release-tmdbhelper
+.PHONY: release-plexkodiconnect
 .PHONY: sync-master sync-master-jellyfin-kodi sync-master-jellycon
 
 release:
@@ -28,6 +33,10 @@ release-confuse:
 
 release-tmdbhelper:
 	tools/release.sh tmdbhelper
+
+# PlexKodiConnect with its two helper add-ons (only those with a new version are released)
+release-plexkodiconnect:
+	tools/release.sh pkc pkcmovies pkctvshows
 
 # Fast-forward master of the forks to upstream master, locally and on
 # GitHub. Fails without changing anything if a master has own commits.

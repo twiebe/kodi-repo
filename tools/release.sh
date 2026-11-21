@@ -4,14 +4,16 @@
 # commit and tag each released add-on in its source repository (annotated, with
 # what changed). Pushing the commit and the tags is left to you.
 #
-#   tools/release.sh [jellyfin] [jellycon] [nightcity] [confuse] [tmdbhelper]   (default: all)
+#   tools/release.sh [jellyfin] [jellycon] [nightcity] [confuse] [tmdbhelper] [pkc] [pkcmovies] [pkctvshows]
+#                                                                                     (default: all)
 #
 # Each name builds only that add-on: nightcity and confuse share a source but are
 # released on their own. Without a name confuse is part of all as soon as the branch
 # of the skin has skins/confuse.
 #
 # The sources are expected next to this repository, override with
-# JELLYFIN_KODI=/path, JELLYCON=/path, NIGHTCITY=/path and TMDBHELPER=/path.
+# JELLYFIN_KODI=/path, JELLYCON=/path, NIGHTCITY=/path, TMDBHELPER=/path, PKC=/path,
+# PKC_MOVIES=/path and PKC_TVSHOWS=/path.
 # BRANCH picks another branch of the forks, NIGHTCITY_BRANCH another one of
 # the skin.
 # Needs git, tar and Docker; the Python part runs in a container.
@@ -22,6 +24,9 @@ JELLYFIN_KODI=${JELLYFIN_KODI:-$ROOT/../jellyfin-kodi}
 JELLYCON=${JELLYCON:-$ROOT/../jellycon}
 NIGHTCITY=${NIGHTCITY:-$ROOT/../kodi-skin-nightcity}
 TMDBHELPER=${TMDBHELPER:-$ROOT/../plugin.video.themoviedb.helper}
+PKC=${PKC:-$ROOT/../plexkodiconnect}
+PKC_MOVIES=${PKC_MOVIES:-$ROOT/../plugin-video-plexkodiconnect-movies}
+PKC_TVSHOWS=${PKC_TVSHOWS:-$ROOT/../plugin-video-plexkodiconnect-tvshows}
 BRANCH=${BRANCH:-release}
 NIGHTCITY_BRANCH=${NIGHTCITY_BRANCH:-main}
 IMAGE=kodi-repo-build
@@ -29,10 +34,13 @@ IMAGE=kodi-repo-build
 BUILD=$ROOT/_release
 # TMDb Helper has no build script, its zip is the branch without these
 TMDBHELPER_EXCLUDE=".github .gitignore AGENTS.md AI_USAGE.md CONTRIBUTING.md icon.xcf"
+# Neither has PlexKodiConnect and its helper add-ons (tests go by .gitattributes)
+PKC_EXCLUDE=".DS_Store .codacy.yaml .gitattributes .github .gitignore CONTRIBUTING.md"
+PKC_HELPER_EXCLUDE=".gitignore"
 
 CONFUSE_ADDON=skins/confuse/addon.xml
 if [ $# -eq 0 ]; then
-    set -- jellyfin jellycon nightcity tmdbhelper
+    set -- jellyfin jellycon nightcity tmdbhelper pkc pkcmovies pkctvshows
     if git -C "$NIGHTCITY" cat-file -e "$NIGHTCITY_BRANCH:$CONFUSE_ADDON" 2>/dev/null; then
         set -- "$@" confuse
     fi
@@ -51,8 +59,11 @@ for name in "$@"; do
         jellyfin) source=$JELLYFIN_KODI branch=$BRANCH ;;
         jellycon) source=$JELLYCON branch=$BRANCH ;;
         nightcity|confuse) source=$NIGHTCITY branch=$NIGHTCITY_BRANCH ;;
-        tmdbhelper) source=$TMDBHELPER branch=$BRANCH ;;
-        *) echo "unknown add-on: $name (jellyfin, jellycon, nightcity, confuse or tmdbhelper)" >&2; exit 1 ;;
+        tmdbhelper) source=$TMDBHELPER branch=$BRANCH id=plugin.video.themoviedb.helper exclude=$TMDBHELPER_EXCLUDE ;;
+        pkc) source=$PKC branch=$BRANCH id=plugin.video.plexkodiconnect exclude=$PKC_EXCLUDE ;;
+        pkcmovies) source=$PKC_MOVIES branch=$BRANCH id=plugin.video.plexkodiconnect.movies exclude=$PKC_HELPER_EXCLUDE ;;
+        pkctvshows) source=$PKC_TVSHOWS branch=$BRANCH id=plugin.video.plexkodiconnect.tvshows exclude=$PKC_HELPER_EXCLUDE ;;
+        *) echo "unknown add-on: $name (jellyfin, jellycon, nightcity, confuse, tmdbhelper, pkc, pkcmovies or pkctvshows)" >&2; exit 1 ;;
     esac
     commit=$(git -C "$source" rev-parse --verify --quiet "$branch^{commit}") || {
         echo "$source: no branch $branch" >&2
@@ -68,13 +79,13 @@ for name in "$@"; do
     fi
     echo "$name: $branch at $(git -C "$source" log -1 --format='%h %s' "$commit")"
     echo "$name $source $commit" >>"$BUILD/sources"
-    if [ "$name" = tmdbhelper ]; then
-        # zipped as it is, straight into out/ (no folder of its own, so the build below skips it)
-        git -C "$source" archive --format=zip --prefix=plugin.video.themoviedb.helper/ \
-            -o "$BUILD/out/plugin.video.themoviedb.helper.zip" "$commit" -- . \
-            $(for path in $TMDBHELPER_EXCLUDE; do echo ":(exclude)$path"; done)
-        continue
-    fi
+    case $name in tmdbhelper|pkc|pkcmovies|pkctvshows)
+        # no build script: zipped as it is, straight into out/ (no folder of its own, so the
+        # build below skips it)
+        git -C "$source" archive --format=zip --prefix="$id/" -o "$BUILD/out/$id.zip" "$commit" -- . \
+            $(for path in $exclude; do echo ":(exclude)$path"; done)
+        continue ;;
+    esac
     mkdir "$BUILD/$name"
     git -C "$source" archive "$commit" | tar -x -C "$BUILD/$name"
 done
@@ -111,7 +122,7 @@ added=$(sed -n 's/^added //p' "$BUILD/result.txt")
 sources=$(cat "$BUILD/sources")
 rm -rf "$BUILD"
 if [ -z "$added" ]; then
-    echo "Nothing to release: raise the version first (release.yaml of a Jellyfin fork, addon.xml of the skin or TMDb Helper)."
+    echo "Nothing to release: raise the version first (release.yaml of a Jellyfin fork, addon.xml of the others)."
     exit 0
 fi
 
@@ -121,7 +132,8 @@ git -C "$ROOT" log -1 --format='Committed %h: %s'
 
 # What changed in a release, one "- " line each: a skin's news of the version (its addon.xml,
 # one line per sentence); for a Jellyfin fork the changelog lines of release.yaml that its
-# previous release tag did not have yet (all of them for the first); for TMDb Helper, which
+# previous release tag did not have yet (all of them for the first); for PlexKodiConnect and its
+# helper add-ons the news of the version in addon.xml as it is, headings included; for TMDb Helper, which
 # has no changelog of its own, the subjects of the fork's own commits since its previous
 # release tag (all of them for the first), without upstream's (from upstream/nexus) and the
 # release commits
@@ -134,6 +146,10 @@ notes() { # name source commit
         before=$(git -C "$2" describe --tags --match 'v*-*' --abbrev=0 "$3^" 2>/dev/null || true)
         git -C "$2" log --no-merges --reverse --format=%s "$3" --not "$base" $before |
             sed 's/^:[a-z0-9_+-]*: //' | grep -v '^Release fork version' | sed 's/^/- /'
+    elif [ "$1" = pkc ] || [ "$1" = pkcmovies ] || [ "$1" = pkctvshows ]; then
+        # the first block of <news>, without its "version ..." line
+        git -C "$2" show "$3:addon.xml" | sed -n '/<news>/,/<\/news>/p' | sed '1s/.*<news>//' |
+            sed -n '2,${/^ *$/q;p}' | sed 's/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g'
     elif [ "$1" = nightcity ] || [ "$1" = confuse ]; then
         addon_xml=addon.xml
         [ "$1" = nightcity ] || addon_xml=$CONFUSE_ADDON
@@ -160,6 +176,9 @@ echo "$added" | while read -r id version; do
         skin.nightcity) name=nightcity ;;
         skin.confuse) name=confuse ;;
         plugin.video.themoviedb.helper) name=tmdbhelper ;;
+        plugin.video.plexkodiconnect) name=pkc ;;
+        plugin.video.plexkodiconnect.movies) name=pkcmovies ;;
+        plugin.video.plexkodiconnect.tvshows) name=pkctvshows ;;
         *) continue ;;
     esac
     set -- $(echo "$sources" | grep "^$name ")
