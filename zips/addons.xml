@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-  <addon id="plugin.video.jellycon" name="JellyCon" version="1:1.0.2-6+py3" provider-name="Jellyfin Contributors">
+  <addon id="plugin.video.jellycon" name="JellyCon" version="1:1.0.2-7+py3" provider-name="Jellyfin Contributors">
     <requires>
       <import addon="xbmc.python" version="3.0.0" />
       <import addon="script.module.requests" version="2.22.0+matrix.1" />
@@ -24,7 +24,7 @@
       <source>https://github.com/jellyfin/jellycon</source>
       <summary lang="en_GB">Browse and play your Jellyfin server media library.</summary>
       <description lang="en_GB">An addon to allow you to browse and playback your Jellyfin (https://jellyfin.org) Movie, TV Show and Music collections.</description>
-      <news>v1:1.0.2-6 (2026-11-21):
+      <news>v1:1.0.2-7 (2026-11-22):
 Fork of JellyCon 1.0.2 (twiebe)
 -------------------------------
 + Show server errors to the user and let them resolve rejected logins
@@ -39,12 +39,13 @@ Fork of JellyCon 1.0.2 (twiebe)
 + Movie and show lists carry runtime, resolution, HDR, codec, audio channels and episode counts like the library, for skins that show them (Nightcity 0.4.94)
 + Sort movie and episode lists by runtime
 + A list is named after the menu entry that opened it
-+ Kodi no longer crashes when Back is pressed twice quickly while a list loads; cached lists are checked against the server by the service</news>
++ Kodi no longer crashes when Back is pressed twice quickly while a list loads; cached lists are checked against the server by the service
++ Artwork width per kind (posters, fanart, thumbs, logos ...) that fits the GUI, under Artwork size in the settings: smaller images load faster and take less memory on small devices</news>
       <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>
       </assets>
-      <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-6-py3.zip</path>
+      <path>plugin.video.jellycon/plugin.video.jellycon-1.0.2-7-py3.zip</path>
     </extension>
   </addon>
   <addon id="plugin.video.jellyfin" name="Jellyfin" version="1:2.2.0-14+py3" provider-name="Jellyfin Contributors">
