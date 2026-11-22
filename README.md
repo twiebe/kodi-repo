@@ -58,9 +58,11 @@ dependencies come from the official repository or with Kodi itself.
 
 ## Why forks
 
-The forks carry a number of fixes that upstream does not have yet. They
-were written with AI assistance, which Jellyfin's contribution policy
-restricts, so only part of them can go upstream and this will take a while.
+The forks carry optimisations, stability improvements and bug fixes that
+upstream does not have, at least not yet. They were written with AI
+assistance, which the contribution policies of some upstream projects
+restrict, so only part of them can go upstream, and that takes a while. A
+fix that upstream solves on its own is dropped from the fork again.
 
 The forks are therefore used daily and actively maintained for the long term:
 they follow upstream releases, and the fixes are reapplied on top of each one.
