@@ -61,9 +61,6 @@ dependencies come from the official repository or with Kodi itself.
 The forks carry a number of fixes that upstream does not have yet. They
 were written with AI assistance, which Jellyfin's contribution policy
 restricts, so only part of them can go upstream and this will take a while.
-The TMDb Helper fork keeps its SQLite cache from using up the address space
-of a 32-bit Kodi (CoreELEC), where videos then fail to start; it goes
-upstream through an issue first, as TMDb Helper's AI usage policy asks.
 
 The forks are therefore used daily and actively maintained for the long term:
 they follow upstream releases, and the fixes are reapplied on top of each one.
