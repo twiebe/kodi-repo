@@ -153,8 +153,11 @@ notes() { # name source commit
     elif [ "$1" = nightcity ] || [ "$1" = confuse ]; then
         addon_xml=addon.xml
         [ "$1" = nightcity ] || addon_xml=$CONFUSE_ADDON
-        git -C "$2" show "$3:$addon_xml" | tr '\n' ' ' | sed -n 's/.*<news>\([^[<]*\).*/\1/p' |
-            sed 's/^ *[0-9][0-9.]* - //; s/\. /.\n/g' | sed 's/^ *//; /^$/d; s/^/- /'
+        # the paragraphs ([CR]) of the version, up to the one that starts the version before
+        git -C "$2" show "$3:$addon_xml" | tr '\n' ' ' | sed -n 's/.*<news>\([^<]*\)<\/news>.*/\1/p' |
+            sed 's/\[CR\]/\n/g' |
+            awk 'NR == 1 { sub(/^ *[0-9][0-9.]* - /, ""); print; next } /^ *[0-9][0-9.]* - / { exit } { print }' |
+            sed 's/\. /.\n/g' | sed 's/^ *//; /^$/d; s/^/- /' | sed 's/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g'
     else
         before=$(git -C "$2" describe --tags --match 'v*-*' --abbrev=0 "$3^" 2>/dev/null || true)
         git -C "$2" show "$3:release.yaml" | sed -n 's/^  + //p' | while read -r line; do
