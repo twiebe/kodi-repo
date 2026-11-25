@@ -2,8 +2,7 @@
 
 The official home of the **Nightcity** and **Confuse** skins, and of
 maintained forks of great add-ons that get some additional love: tuned for
-usability, performance and stability, and kept up with every upstream
-release.
+usability, performance and stability, and kept up with upstream releases.
 
 ## Skins
 
